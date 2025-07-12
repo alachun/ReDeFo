@@ -1,0 +1,35 @@
+Mode Switching Module Requirements for Sun Acquisition Control Software
+
+The sun acquisition process consists of four sub-modes: Rate Damping Mode (RDSM), Pitch Axis Search Mode (PASM), Roll Axis Search Mode (RASM), and Cruise Sun-pointing Mode (CSM). Each sub-mode performs the following functions:
+
+Rate Damping Mode (RDSM):
+Uses thrusters to control the spacecraft's angular velocity along all three axes, reducing the angular rates to stabilize the spacecraft's attitude (i.e., keeping angular velocities small).
+
+Pitch Axis Search Mode (PASM):
+Uses thrusters to rotate the spacecraft along the pitch axis at a specified angular velocity in order to search for the Sun.
+
+Roll Axis Search Mode (RASM):
+Uses thrusters to rotate the spacecraft along the roll axis at a specified angular velocity in order to search for the Sun.
+
+Cruise Sun-pointing Mode (CSM):
+Once the Sun sensor detects sunlight, the spacecraft maintains attitude stability and continuously tracks the Sun.
+
+Automatic Mode Switching Conditions:
+
+RDSM → PASM:
+The absolute values of angular velocities along all axes remain below 0.15°/s continuously for 44.8 seconds, or the RDSM mode has lasted for 128 seconds.
+
+PASM → RASM:
+The Sun is not detected after continuously performing pitch-axis search for 720 seconds.
+
+RASM → PASM:
+The Sun is not detected after continuously performing roll-axis search for 800 seconds.
+
+PASM → CSM:
+The Sun becomes visible and remains visible for more than 2.048 seconds.
+
+RASM → CSM:
+The Sun becomes visible and remains visible for more than 2.048 seconds.
+
+RASM → RDSM:
+If both pitch-axis and roll-axis search modes have been executed twice without detecting the Sun, the backup Sun sensor will be activated and the sun acquisition process will be restarted by switching to the Rate Damping Mode (RDSM).
