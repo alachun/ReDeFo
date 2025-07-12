@@ -1,0 +1,51 @@
+#include <stdbool.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define RDSM            		0
+#define PASM           		1
+#define RASM            		2
+#define CSM	          		3
+
+static bool is_roll_stable(float roll_angle) {
+    return (roll_angle < 0.1) && (roll_angle > -0.1);
+}
+
+int update_ras_mode(float roll_angle, int sun_flag, int* mode, int* mode_time, int* stable_time)
+{
+    if (*mode != RASM) {
+        return -1;
+    }
+
+    bool stable = is_roll_stable(roll_angle);								
+    
+    if (sun_flag == 1)										
+    {    	
+    	if (stable)								
+    	{                                                   
+        	(*stable_time)++ ;							
+        	                                                
+        	if (*stable_time > 12)					
+        	{                                               
+                	*mode = CSM;
+        		*mode_time = 0 ;													
+        		*stable_time = 0 ;	
+			return 1;							
+        	}
+    	}
+    }
+    else
+    {
+        *stable_time = 0 ;							 	
+    }                                                       
+                                                            
+                                                            
+    if (*mode_time > 800)								     
+    {
+        *mode = PASM;
+        *mode_time = 0;								 							
+        *stable_time = 0;	
+        return 1;						 	    	
+    }
+    return 0;
+}

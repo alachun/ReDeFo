@@ -1,0 +1,33 @@
+#include <stdbool.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define RDSM            		0
+#define PASM           		1
+#define RASM            		2
+#define CSM	          		3
+
+int update_rds_mode(float omega_x, float omega_y, float omega_z, int* mode, int* mode_time, int* stable_time);
+int update_pas_mode(float pitch_angle, int sun_flag, int* mode, int* mode_time, int* stable_time);
+int update_ras_mode(float roll_angle, int sun_flag, int* mode, int* mode_time, int* stable_time);   
+int update_cs_mode();  
+
+void update_mode(float omega_x, float omega_y, float omega_z,
+                 int* mode, int* mode_time, int* stable_time) {
+    switch (*mode) {
+        case RDSM:
+            update_rds_mode(omega_x, omega_y, omega_z, mode, mode_time, stable_time);
+            break;
+        case PASM:
+            update_pas_mode(pitch_angle, sun_flag, mode, mode_time, stable_time);
+            break;
+        case CSM:
+            update_ras_mode(roll_angle, sun_flag, mode, mode_time, stable_time);
+            break;
+        case RASM:
+            update_cs_mode();
+            break;
+        default:
+            break;
+    }
+}

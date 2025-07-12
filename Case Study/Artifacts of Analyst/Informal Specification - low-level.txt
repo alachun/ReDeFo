@@ -1,0 +1,110 @@
+low-level specifications for RDSM mode
+
+Preconditions (Input Requirements)
+The angular velocities in all three axes must be within the range of ¨C360 to 360 degrees per second.
+
+Both the stability duration and the submode runtime must be within a reasonable range of 0 to 10,000.
+
+The current mode must be the Rate Damping Mode (RDSM).
+
+Function Behavior Description
+This function modifies three variables:
+
+the current mode,
+
+the submode runtime, and
+
+the angular velocity stability duration.
+
+The return value of the function is either 0 or 1, indicating whether a mode transition has occurred.
+
+Behavior Guarantees (Output Properties)
+If the angular velocities in all three directions are within ¡À0.15 degrees per second,
+¡ú then the stability duration is incremented by one.
+
+Otherwise, the stability duration remains unchanged (it is not reset to 0).
+
+If any of the following conditions is met:
+
+The system has remained stable for more than 44 seconds and the angular velocities are still within ¡À0.15¡ã/s,
+
+OR the submode has been running for 128 seconds,
+¡ú then the mode will transition to Passive Attitude Stabilization Mode (PASM).
+
+Once the mode transitions to PASM, both the submode runtime and the stability duration are reset to zero.
+
+If none of the transition conditions is met, the system remains in RDSM, and the submode runtime is unchanged (neither incremented nor reset).
+
+
+
+
+
+low-level specifications for PASM mode
+
+
+Preconditions (Input Requirements)
+The solar pitch angle must be within the range of ¨C180 to 180 degrees.
+
+The solar visibility flag must be either 0 or 1.
+
+Both the stability duration and the submode runtime must be within a reasonable range of 0 to 10,000.
+
+The current mode must be the Pitch Axis Search Mode (PASM).
+
+Function Behavior Description
+This function modifies the following three variables:
+
+the current mode,
+
+the submode runtime, and
+
+the solar pitch angle stability duration.
+
+The return value of the function is either 0 or 1, indicating whether a mode transition has occurred.
+
+Behavior Guarantees (Output Properties)
+If the sun is not visible, the stability duration is reset to 0.
+
+Otherwise, if the solar pitch angle exceeds ¡À0.25 degrees, the stability duration is incremented by one.
+
+If the stability duration has already exceeded 12 seconds, the system transitions to the Cruise Mode, and both the submode runtime and stability duration are reset to zero.
+
+If the submode runtime exceeds 720 seconds, the system transitions to the Roll Axis Search Mode (RASM).
+
+If none of the transition conditions is met, the system remains in PASM, and both the stability duration and submode runtime remain unchanged (neither incremented nor reset).
+
+
+
+
+low-level specifications for RASM mode
+
+Preconditions (Input Requirements)
+The solar roll angle must be within the range of ¨C180 to 180 degrees.
+
+The solar visibility flag must be either 0 or 1.
+
+Both the stability duration and the submode runtime must be within a reasonable range of 0 to 10,000.
+
+The current mode must be the Roll Axis Search Mode (RASM).
+
+Function Behavior Description
+This function modifies the following three variables:
+
+the current mode,
+
+the submode runtime, and
+
+the solar roll angle stability duration.
+
+The function returns either 0 or 1, indicating whether a mode transition has occurred.
+
+Behavior Guarantees (Output Properties)
+If the sun is not visible, the stability duration is reset to 0.
+
+Otherwise, if the solar roll angle exceeds ¡À0.1 degrees, the stability duration is incremented by one.
+
+If the stability duration has already exceeded 12 seconds, the system transitions to Cruise Mode, and both the submode runtime and stability duration are reset to zero.
+
+If the submode runtime exceeds 800 seconds, the system transitions to the Pitch Axis Search Mode (PASM).
+
+If none of the transition conditions is met, the system remains in RASM, and both the stability duration and submode runtime remain unchanged (neither incremented nor reset).

@@ -1,0 +1,50 @@
+#include <stdbool.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define RDSM            		0
+#define PASM           		1
+#define RASM            		2
+#define CSM	          		3
+
+static bool is_pitch_stable(float pitch_angle) {
+    return (pitch_angle < 0.25) && (pitch_angle > -0.25);
+}
+
+int update_pas_mode(float pitch_angle, int sun_flag, int* mode, int* mode_time, int* stable_time)
+{
+    if (*mode != PASM) {
+        return -1;
+    }
+
+    bool stable = is_pitch_stable(pitch_angle);
+
+    if (sun_flag == 1)						   		    
+    {
+       if (stable)								
+       {
+           (*stable_time)++;							
+
+           if (*stable_time > 12)    				
+           {
+               *mode = CSM;			
+               *mode_time = 0;						
+               *stable_time = 0;	
+               return 1;				
+           }
+       }
+    }
+    else
+    {
+       *stable_time = 0;							
+    }
+
+    if (*mode_time > 720)							
+    {
+       *mode = RASM;					    
+       *mode_time = 0;								
+       *stable_time = 0;
+       return 1;							
+    }
+    return 0;
+}

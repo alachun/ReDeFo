@@ -1,0 +1,59 @@
+MODULE main
+
+VAR
+  state : {RDSM, PASM, RASM, CSM};
+
+  -- 条件变量定义
+  low_rate_44_8s_or_128s : boolean;
+  sun_visible_2_048s     : boolean;
+  no_sun_720s            : boolean;
+  no_sun_800s            : boolean;
+  two_cycles_no_sun      : boolean;
+
+ASSIGN
+  init(state) := RDSM;
+
+  next(state) := case
+
+    -- RDSM → PASM
+    state = RDSM & low_rate_44_8s_or_128s : PASM;
+
+    -- PASM → CSM
+    state = PASM & sun_visible_2_048s : CSM;
+
+    -- PASM → RASM
+    state = PASM & no_sun_720s : RASM;
+
+    -- RASM → PASM
+    state = RASM & no_sun_800s : PASM;
+
+    -- RASM → CSM
+    state = RASM & sun_visible_2_048s : CSM;
+
+    -- RASM → RDSM
+    state = RASM & two_cycles_no_sun : RDSM;
+
+    -- 默认保持当前状态
+    TRUE : state;
+  esac;
+
+INVAR !(no_sun_720s & sun_visible_2_048s)
+
+INVAR !(no_sun_800s & sun_visible_2_048s)
+
+INVAR !(sun_visible_2_048s & two_cycles_no_sun)
+
+INVAR !(no_sun_800s & two_cycles_no_sun)
+
+LTLSPEC G(state=RDSM & low_rate_44_8s_or_128s -> X state=PASM)
+
+LTLSPEC G(state=PASM & sun_visible_2_048s -> X state=CSM)
+
+LTLSPEC G(state=PASM & no_sun_720s -> X state=RASM)
+
+LTLSPEC G(state=RASM & no_sun_800s -> X state=PASM)
+
+LTLSPEC G(state=RASM & sun_visible_2_048s -> X state=CSM)
+
+LTLSPEC G(state=RASM & two_cycles_no_sun -> X state=RDSM)
+

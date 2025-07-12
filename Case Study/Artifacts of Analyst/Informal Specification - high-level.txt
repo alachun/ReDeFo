@@ -1,0 +1,17 @@
+high-level specifications
+
+If the system is currently in RDSM mode and experiences a low-rate condition lasting for 44.8 seconds or 128 seconds, then it will transition to PASM mode at the next time step.
+
+If the system is currently in PASM mode and the sun has been continuously visible for 2048 seconds, then it will transition to CSM mode at the next time step.
+
+If the system is currently in PASM mode and no sunlight has been detected in the past 720 seconds, then it will transition to RASM mode at the next time step.
+
+If the system is currently in RASM mode and there is still no sunlight for the past 800 seconds, then it will transition back to PASM mode at the next time step.
+
+If the system is currently in RASM mode and the sun has been continuously visible for 2048 seconds, then it will transition to CSM mode at the next time step.
+
+If the system is currently in RASM mode and there is no sunlight throughout two consecutive orbital periods (i.e., the satellite remains completely in darkness), then it will fall back to RDSM mode at the next time step.
+
+
+
+

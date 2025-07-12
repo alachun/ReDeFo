@@ -1,0 +1,13 @@
+#include <stdbool.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define RDSM            		0
+#define PASM           		1
+#define RASM            		2
+#define CSM	          		3
+
+int update_cs_mode()
+{
+    return 0;
+}
