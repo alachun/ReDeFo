@@ -1,0 +1,17 @@
+1. RDSM → PASM switch condition
+G (in_RDSM ∧ low_rate_44_8s_or_128s → X in_PASM)
+
+2. PASM → CSM switch condition
+G (in_PASM ∧ sun_visible_2_048s → X in_CSM)
+
+3. PASM → RASM switch condition
+G (in_PASM ∧ no_sun_720s → X in_RASM)
+
+4. RASM → PASM switch condition
+G (in_RASM ∧ no_sun_800s → X in_PASM)
+
+5. RASM → CSM switch condition
+G (in_RASM ∧ sun_visible_2_048s → X in_CSM)
+
+6. RASM → RDSM switch condition
+G (in_RASM ∧ two_cycles_no_sun → X in_RDSM)
